@@ -14,14 +14,19 @@ import time
 import platform    # For getting the operating system name
 import subprocess  # For executing a shell command
 
+colors = {"green":"\033[1;32;40m ", "yellow":"\033[1;33;40m ", "red":"\033[1;31;40m ", "purple":"\033[1;35;40m ", "white":"\033[1;37;40m "}
+
 def PingTime(host):
+    system = platform.system().lower()
+    system_windows = "windows"
+
     """
     Returns True if host (str) responds to a ping request.
     Remember that a host may not respond to a ping (ICMP) request even if the host name is valid.
     """
 
     # Option for the number of packets as a function of
-    if platform.system().lower()=='windows': # Windows
+    if system == system_windows: # Windows
         param = '-n'
     else: # Linux
         param = '-c'
@@ -29,14 +34,14 @@ def PingTime(host):
     # Building the command. Ex: "ping -c 1 google.com"
     command = ['ping', param, '2', host]
         
-    if platform.system().lower()=='windows':
+    if system == system_windows:
         CREATE_NO_WINDOW = 0x08000000 # Nouveau
         p = subprocess.run(command, shell=False, stdout=subprocess.PIPE, creationflags=CREATE_NO_WINDOW) # Windows
     else: 
         p = subprocess.run(command, shell=False, stdout=subprocess.PIPE) # Linux
 
     #Windows
-    if platform.system().lower()=='windows':
+    if system == system_windows:
         result = p.stdout.decode('cp1252') # .encode('utf-8') # encodage OEM 850
         result = result.replace("\r\n","\n")
         tab1 = result.split("\n")
@@ -67,7 +72,13 @@ def PlotPing(host, list, maxdata):
     plt.clp()
     plt.clt()
     plt.plot(list, fillx = True)
-    plt.title("ICMP reponse from " + host + " " + str(ping) + " ms")
+    if(ping < 30 ):
+        color = colors["green"]
+    elif ping < 80 :
+        color = colors["yellow"]
+    else:
+        color = colors["red"]
+    plt.title("ICMP reponse from " + host + color + str(ping) + " ms \033[1;37;40m")
     plt.nocolor()
     plt.sleep(0.01)
     plt.show()
