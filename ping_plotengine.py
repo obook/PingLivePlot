@@ -14,7 +14,7 @@ import time
 import platform    # For getting the operating system name
 import subprocess  # For executing a shell command
 
-colors = {"green":"\33[1;32;40m ", "yellow":"\033[1;33;40m ", "red":"\033[1;31;40m ", "purple":"\033[1;35;40m ", "white":"\033[1;37;40m ", "reset":"\e[0m"}
+colors = {"green":"\33[1;32;40m ", "yellow":"\033[1;33;40m ", "red":"\033[1;31;40m ", "purple":"\033[1;35;40m ", "white":"\033[1;37;40m ", "reset":"\33[0m"}
 default_color = colors["green"]
 
 def IsWindows():
