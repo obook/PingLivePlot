@@ -15,6 +15,7 @@ import platform    # For getting the operating system name
 import subprocess  # For executing a shell command
 
 colors = {"green":"\033[1;32;40m ", "yellow":"\033[1;33;40m ", "red":"\033[1;31;40m ", "purple":"\033[1;35;40m ", "white":"\033[1;37;40m "}
+default_color = colors["green"]
 
 def IsWindows():
     return(platform.system().lower() == "windows")
@@ -73,15 +74,13 @@ def PlotPing(host, list, maxdata):
     plt.clp()
     plt.clt()
     plt.plot(list, fillx = True)
-    color = ""
-    if IsWindows():
-        if(ping < 30 ):
-            color = colors["green"]
-        elif ping < 80 :
-            color = colors["yellow"]
-        else:
-            color = colors["red"]
-    plt.title("ICMP reponse from " + host + color + str(ping) + " ms \033[1;37;40m")
+    if(ping < 30 ):
+        color = colors["green"]
+    elif ping < 80 :
+        color = colors["yellow"]
+    else:
+        color = colors["red"]
+    plt.title(default_color  + "ICMP reponse from " + host + color + str(ping) + default_color + "ms")
     plt.nocolor()
     plt.sleep(0.01)
     plt.show()
