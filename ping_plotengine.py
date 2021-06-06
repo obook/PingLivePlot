@@ -16,9 +16,10 @@ import subprocess  # For executing a shell command
 
 colors = {"green":"\033[1;32;40m ", "yellow":"\033[1;33;40m ", "red":"\033[1;31;40m ", "purple":"\033[1;35;40m ", "white":"\033[1;37;40m "}
 
+def IsWindows():
+    return(platform.system().lower() == "windows")
+
 def PingTime(host):
-    system = platform.system().lower()
-    system_windows = "windows"
 
     """
     Returns True if host (str) responds to a ping request.
@@ -26,7 +27,7 @@ def PingTime(host):
     """
 
     # Option for the number of packets as a function of
-    if system == system_windows: # Windows
+    if IsWindows(): # Windows
         param = '-n'
     else: # Linux
         param = '-c'
@@ -34,14 +35,14 @@ def PingTime(host):
     # Building the command. Ex: "ping -c 1 google.com"
     command = ['ping', param, '2', host]
         
-    if system == system_windows:
+    if IsWindows():
         CREATE_NO_WINDOW = 0x08000000 # Nouveau
         p = subprocess.run(command, shell=False, stdout=subprocess.PIPE, creationflags=CREATE_NO_WINDOW) # Windows
     else: 
         p = subprocess.run(command, shell=False, stdout=subprocess.PIPE) # Linux
 
     #Windows
-    if system == system_windows:
+    if IsWindows():
         result = p.stdout.decode('cp1252') # .encode('utf-8') # encodage OEM 850
         result = result.replace("\r\n","\n")
         tab1 = result.split("\n")
@@ -72,12 +73,14 @@ def PlotPing(host, list, maxdata):
     plt.clp()
     plt.clt()
     plt.plot(list, fillx = True)
-    if(ping < 30 ):
-        color = colors["green"]
-    elif ping < 80 :
-        color = colors["yellow"]
-    else:
-        color = colors["red"]
+    color = ""
+    if IsWindows():
+        if(ping < 30 ):
+            color = colors["green"]
+        elif ping < 80 :
+            color = colors["yellow"]
+        else:
+            color = colors["red"]
     plt.title("ICMP reponse from " + host + color + str(ping) + " ms \033[1;37;40m")
     plt.nocolor()
     plt.sleep(0.01)
@@ -87,8 +90,6 @@ def PlotPing(host, list, maxdata):
 host = "google.com"
 maxdata = 50 # 50 horizontal values max
 pingslist = np.zeros(shape=(maxdata))
-# xlabels = [str(i) + "π" for i in range(5)]
 while True:
     pingslist = PlotPing(host, pingslist, maxdata)
     time.sleep(3)
-
