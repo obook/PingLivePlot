@@ -85,10 +85,8 @@ def PlotPing(host, list, maxdata):
     plt.title(default_color  + "ICMP reponse from " + host + color + str(ping) + default_color + "ms")
 
     if version.parse(plt.__version__) > version.parse("2.3.1"):
-        print("*********** HELLO")
         plt.colorless()
     else:
-        print("*********** WORLD")
         plt.nocolor() # in version 3.0.1, changed to colorless()
 
     plt.sleep(0.01)
