@@ -13,6 +13,8 @@ import numpy as np
 import time
 import platform    # For getting the operating system name
 import subprocess  # For executing a shell command
+from importlib.metadata import version # check plotext version
+from cmp_version import cmp_version, VersionString
 
 colors = {"green":"\33[1;32;40m ", "yellow":"\033[1;33;40m ", "red":"\033[1;31;40m ", "purple":"\033[1;35;40m ", "white":"\033[1;37;40m ", "reset":"\33[0m"}
 default_color = colors["green"]
@@ -81,7 +83,14 @@ def PlotPing(host, list, maxdata):
     else:
         color = colors["red"]
     plt.title(default_color  + "ICMP reponse from " + host + color + str(ping) + default_color + "ms")
-    plt.nocolor()
+    '''
+    if (cmp_version(version(plt), "2.3.1") > 1 ):
+        print("*********** HELLO")
+        plt.colorless()
+    else:
+        print("*********** WORLD")
+        plt.nocolor() # in version 3.0.1, changed to colorless()
+    '''
     plt.sleep(0.01)
     plt.show()
     return(list)
