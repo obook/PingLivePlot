@@ -15,6 +15,9 @@ import platform    # For getting the operating system name
 import subprocess  # For executing a shell command
 from packaging import version # check plotext version
 
+host = "google.com"
+maxdata = 50 # 50 horizontal values max
+
 colors = {"green":"\33[1;32;40m ", "yellow":"\033[1;33;40m ", "red":"\033[1;31;40m ", "purple":"\033[1;35;40m ", "white":"\033[1;37;40m ", "reset":"\33[0m"}
 default_color = colors["green"]
 
@@ -83,18 +86,17 @@ def PlotPing(host, list, maxdata):
         color = colors["red"]
     plt.title(default_color  + "ICMP reponse from " + host + color + str(ping) + default_color + "ms")
 
-    if version.parse(plt.__version__) > version.parse("2.3.1"):
+    if version.parse(plt.__version__) > version.parse("2.3.1"):  # in version 3.0.1, nocolor is changed to colorless()
         plt.colorless()
     else:
-        plt.nocolor() # in version 3.0.1, changed to colorless()
+        plt.nocolor()
 
     plt.sleep(0.01)
     plt.show()
     return(list)
 
-host = "google.com"
-maxdata = 50 # 50 horizontal values max
-pingslist = np.zeros(shape=(maxdata))
-while True:
-    pingslist = PlotPing(host, pingslist, maxdata)
-    time.sleep(3)
+if __name__ == "__main__":
+    pingslist = np.zeros(shape=(maxdata))
+    while True:
+        pingslist = PlotPing(host, pingslist, maxdata)
+        time.sleep(3)
