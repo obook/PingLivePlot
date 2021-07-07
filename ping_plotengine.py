@@ -7,6 +7,8 @@
 
 A faire : que faire avec un ping = -1 ?
 
+Tested : Windows plotext-3.1.3
+
 '''
 import plotext as plt
 import numpy as np
@@ -77,7 +79,8 @@ def PlotPing(host, list, maxdata):
     list = np.delete(list, maxdata)
     plt.clp()
     plt.clt()
-    plt.plot(list, fillx = True)
+    # plt.scatter(list, label = "Ping", color = "gold", fillx = True)
+    plt.scatter(list, fillx = True)
     if(ping < 30 ):
         color = colors["green"]
     elif ping < 80 :
@@ -85,12 +88,10 @@ def PlotPing(host, list, maxdata):
     else:
         color = colors["red"]
     plt.title(default_color  + "ICMP reponse from " + host + color + str(ping) + default_color + "ms")
-
     if version.parse(plt.__version__) > version.parse("2.3.1"):  # in version 3.0.1, nocolor is changed to colorless()
         plt.colorless()
     else:
         plt.nocolor()
-
     plt.sleep(0.01)
     plt.show()
     return(list)
